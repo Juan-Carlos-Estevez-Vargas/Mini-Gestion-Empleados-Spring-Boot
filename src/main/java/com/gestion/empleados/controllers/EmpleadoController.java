@@ -27,7 +27,7 @@ public class EmpleadoController {
 		
 		model.addAttribute("titulo", "Listado de Empleados");
 		model.addAttribute("empleados", empleados);
-		model.addAttribute("page", pageRender);
+		model.addAttribute("page", pageRender); 
 		
 		return "listar";
 	}

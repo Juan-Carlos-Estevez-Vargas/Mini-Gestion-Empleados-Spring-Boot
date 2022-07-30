@@ -37,7 +37,7 @@ public class Empleado {
 	private String email;
 
 	@NotNull
-	private int telefono;
+	private Long telefono;
 
 	@NotEmpty
 	private String sexo;
