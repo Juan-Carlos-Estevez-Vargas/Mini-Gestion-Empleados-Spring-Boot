@@ -53,7 +53,7 @@ public class EmpleadoController {
 
 		return "listar";
 	}
-	
+
 	@GetMapping("/form")
 	public String mostrarFormularioDeRegistrarCliente(Map<String, Object> modelo) {
 		Empleado empleado = new Empleado();
@@ -61,18 +61,41 @@ public class EmpleadoController {
 		modelo.put("titulo", "Registro de empleados.");
 		return "form";
 	}
-	
+
 	@PostMapping("/form")
-	public String guardarEmpleado(@Valid Empleado empleado, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
+	public String guardarEmpleado(@Valid Empleado empleado, BindingResult result, Model model, RedirectAttributes flash,
+			SessionStatus status) {
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Registro de Empleado");
 			return "form";
 		}
-		
-		String mensaje = (empleado.getId() != null) ? "El empleado ha sido editado con éxito" : "Empleado registrado con éxito.";
+
+		String mensaje = (empleado.getId() != null) ? "El empleado ha sido editado con éxito"
+				: "Empleado registrado con éxito.";
 		empleadoService.save(empleado);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensaje);
 		return "redirect:/listar";
+	}
+
+	@GetMapping("/form/{id}")
+	public String editarEmpleado(@PathVariable(value = "id") Long id, Map<String, Object> modelo,
+			RedirectAttributes flash) {
+		Empleado empleado = null;
+
+		if (id > 0) {
+			empleado = empleadoService.findOne(id);
+			if (empleado == null) {
+				flash.addFlashAttribute("error", "El id del empleado no existe en la base de datos.");
+				return "redirect:/listar";
+			}
+		} else {
+			flash.addFlashAttribute("error", "El id del empleado no puede ser 0.");
+			return "redirect:/listar";
+		}
+
+		modelo.put("empleado", empleado);
+		modelo.put("titulo", "Edición de empleados.");
+		return "form";
 	}
 }
