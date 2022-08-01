@@ -2,15 +2,20 @@ package com.gestion.empleados.controllers;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gestion.empleados.entities.Empleado;
@@ -47,5 +52,27 @@ public class EmpleadoController {
 		model.addAttribute("page", pageRender);
 
 		return "listar";
+	}
+	
+	@GetMapping("/form")
+	public String mostrarFormularioDeRegistrarCliente(Map<String, Object> modelo) {
+		Empleado empleado = new Empleado();
+		modelo.put("empleado", empleado);
+		modelo.put("titulo", "Registro de empleados.");
+		return "form";
+	}
+	
+	@PostMapping("/form")
+	public String guardarEmpleado(@Valid Empleado empleado, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
+		if (result.hasErrors()) {
+			model.addAttribute("titulo", "Registro de Empleado");
+			return "form";
+		}
+		
+		String mensaje = (empleado.getId() != null) ? "El empleado ha sido editado con éxito" : "Empleado registrado con éxito.";
+		empleadoService.save(empleado);
+		status.setComplete();
+		flash.addFlashAttribute("success", mensaje);
+		return "redirect:/listar";
 	}
 }
