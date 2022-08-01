@@ -98,4 +98,13 @@ public class EmpleadoController {
 		modelo.put("titulo", "Edición de empleados.");
 		return "form";
 	}
+	
+	@GetMapping("/eliminar/{id}")
+	public String eliminarEmpleado(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
+		if (id > 0) {
+			empleadoService.delete(id);
+			flash.addFlashAttribute("success", "Empleado eliminado con éxito");
+		}
+		return "redirect:/listar";
+	}
 }
