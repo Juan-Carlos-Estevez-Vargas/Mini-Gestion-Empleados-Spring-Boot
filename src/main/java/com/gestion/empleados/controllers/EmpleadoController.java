@@ -24,6 +24,7 @@ public class EmpleadoController {
 		Pageable pageRequest = PageRequest.of(page, 5);
 		Page<Empleado> empleados = empleadoService.findAll(pageRequest);
 		PageRender<Empleado> pageRender = new PageRender<>("/listar", empleados);
+		System.out.print(empleados.toString());
 		
 		model.addAttribute("titulo", "Listado de Empleados");
 		model.addAttribute("empleados", empleados);
