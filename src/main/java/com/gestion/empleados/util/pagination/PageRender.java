@@ -50,6 +50,10 @@ public class PageRender<T> {
 			paginas.add(new PageItem(desde + i, paginaActual == desde + i));
 		}
 	}
+	
+	public boolean isFirst() {
+		return page.isFirst();
+	}
 
 	public boolean isLast() {
 		return page.isLast();
