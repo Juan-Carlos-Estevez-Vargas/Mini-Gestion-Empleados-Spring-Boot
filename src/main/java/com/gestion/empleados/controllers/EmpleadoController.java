@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.gestion.empleados.entities.Empleado;
 import com.gestion.empleados.services.IEmpleadoService;
 import com.gestion.empleados.util.pagination.PageRender;
+import com.gestion.empleados.util.reportes.EmpleadoExporterExcel;
 import com.gestion.empleados.util.reportes.EmpleadoExporterPDF;
 import com.lowagie.text.DocumentException;
 
@@ -142,13 +143,13 @@ public class EmpleadoController {
 		String fechaActual = dateFormatter.format(new Date());
 
 		String cabecera = "Content-Disposition";
-		String valor = "attachment; filename=Empleados_" + fechaActual + ".pdf";
+		String valor = "attachment; filename=Empleados_" + fechaActual + ".xlsx";
 		
 		response.setHeader(cabecera, valor);
 		
 		List<Empleado> empleados = empleadoService.findAll();
 		
-		EmpleadoExporterPDF exporter = new EmpleadoExporterPDF(empleados);
+		EmpleadoExporterExcel exporter = new EmpleadoExporterExcel(empleados);
 		exporter.exportar(response);
 	}
 	
