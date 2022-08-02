@@ -1,7 +1,13 @@
 package com.gestion.empleados.controllers;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.gestion.empleados.entities.Empleado;
 import com.gestion.empleados.services.IEmpleadoService;
 import com.gestion.empleados.util.pagination.PageRender;
+import com.gestion.empleados.util.reportes.EmpleadoExporterPDF;
+import com.lowagie.text.DocumentException;
 
 @Controller
 public class EmpleadoController {
@@ -98,7 +106,7 @@ public class EmpleadoController {
 		modelo.put("titulo", "Edición de empleados.");
 		return "form";
 	}
-	
+
 	@GetMapping("/eliminar/{id}")
 	public String eliminarEmpleado(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
@@ -106,5 +114,23 @@ public class EmpleadoController {
 			flash.addFlashAttribute("success", "Empleado eliminado con éxito");
 		}
 		return "redirect:/listar";
+	}
+
+	@GetMapping("/exportarPDF")
+	public void exportarListadoDeEmpleadosPDF(HttpServletResponse response) throws DocumentException, IOException {
+		response.setContentType("application/pdf");
+		
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String fechaActual = dateFormatter.format(new Date());
+
+		String cabecera = "Content-Disposition";
+		String valor = "attachment; filename=Empleados_" + fechaActual + ".pdf";
+		
+		response.setHeader(cabecera, valor);
+		
+		List<Empleado> empleados = empleadoService.findAll();
+		
+		EmpleadoExporterPDF exporter = new EmpleadoExporterPDF(empleados);
+		exporter.exportar(response);
 	}
 }

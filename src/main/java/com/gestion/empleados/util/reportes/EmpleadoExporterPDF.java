@@ -18,12 +18,14 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-import lombok.Data;
-
-@Data
 public class EmpleadoExporterPDF {
 
 	private List<Empleado> listaEmpleados;
+
+	public EmpleadoExporterPDF(List<Empleado> listaEmpleados) {
+		super();
+		this.listaEmpleados = listaEmpleados;
+	}
 
 	private void escribirCabeceraTabla(PdfPTable tabla) {
 		PdfPCell celda = new PdfPCell();
@@ -89,7 +91,7 @@ public class EmpleadoExporterPDF {
 		PdfPTable tabla = new PdfPTable(8);
 		tabla.setWidthPercentage(100);
 		tabla.setSpacingBefore(15);
-		tabla.setWidths(new float[] { 1f, 2.3f, 2.3f, 6f, 2.9f, 3.5f, 2f, 2, 2f });
+		tabla.setWidths(new float[] { 1f, 2.3f, 2.3f, 6f, 2.9f, 3.5f, 1.7f, 2.5f });
 		tabla.setWidthPercentage(110);
 
 		escribirCabeceraTabla(tabla);
