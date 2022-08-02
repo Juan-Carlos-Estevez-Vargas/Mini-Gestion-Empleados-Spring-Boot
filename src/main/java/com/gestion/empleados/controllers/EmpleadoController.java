@@ -133,4 +133,23 @@ public class EmpleadoController {
 		EmpleadoExporterPDF exporter = new EmpleadoExporterPDF(empleados);
 		exporter.exportar(response);
 	}
+	
+	@GetMapping("/exportarExcel")
+	public void exportarListadoDeEmpleadosExcel(HttpServletResponse response) throws DocumentException, IOException {
+		response.setContentType("application/octet-stream");
+		
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String fechaActual = dateFormatter.format(new Date());
+
+		String cabecera = "Content-Disposition";
+		String valor = "attachment; filename=Empleados_" + fechaActual + ".pdf";
+		
+		response.setHeader(cabecera, valor);
+		
+		List<Empleado> empleados = empleadoService.findAll();
+		
+		EmpleadoExporterPDF exporter = new EmpleadoExporterPDF(empleados);
+		exporter.exportar(response);
+	}
+	
 }
