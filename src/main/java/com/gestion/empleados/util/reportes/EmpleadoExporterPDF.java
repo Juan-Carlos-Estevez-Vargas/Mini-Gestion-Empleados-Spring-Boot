@@ -27,6 +27,12 @@ public class EmpleadoExporterPDF {
 		this.listaEmpleados = listaEmpleados;
 	}
 
+	/**
+	 * Genera la cabecera de la tabla del reporte en PDF a generar; esto se realiza
+	 * utilizando las clases de la librería encargada de realizar dicho reporte.
+	 * 
+	 * @param tabla a incluir la cabecera.
+	 */
 	private void escribirCabeceraTabla(PdfPTable tabla) {
 		PdfPCell celda = new PdfPCell();
 
@@ -61,6 +67,11 @@ public class EmpleadoExporterPDF {
 		tabla.addCell(celda);
 	}
 
+	/**
+	 * Genera una tabla con los registros traidos de la base de datos.
+	 * 
+	 * @param tabla a insertar los registros.
+	 */
 	private void escribirDatosTabla(PdfPTable tabla) {
 		for (Empleado empleado : listaEmpleados) {
 			tabla.addCell(String.valueOf(empleado.getId()));
@@ -74,6 +85,16 @@ public class EmpleadoExporterPDF {
 		}
 	}
 
+	/**
+	 * Crea un nuevo documento de tipo PDF A4, agrega una fuente personalizada, un
+	 * parrafo y una tabla con tamaño y estilos personalizados al documento; además
+	 * construye la cabecera y llama al método para insertar los datos pasandolo
+	 * como parámetro la tabla posteriormente creada.
+	 * 
+	 * @param response
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
 	public void exportar(HttpServletResponse response) throws DocumentException, IOException {
 		Document documento = new Document(PageSize.A4);
 		PdfWriter.getInstance(documento, response.getOutputStream());

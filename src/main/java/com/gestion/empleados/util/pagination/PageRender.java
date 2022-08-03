@@ -19,6 +19,12 @@ public class PageRender<T> {
 	private int paginaActual;
 	private List<PageItem> paginas;
 
+	/**
+	 * Renderiza y genera la paginación mediante un pequeño algoritmo.
+	 * 
+	 * @param url
+	 * @param page página a renderizar.
+	 */
 	public PageRender(String url, Page<T> page) {
 		this.url = url;
 		this.page = page;
@@ -50,7 +56,7 @@ public class PageRender<T> {
 			paginas.add(new PageItem(desde + i, paginaActual == desde + i));
 		}
 	}
-	
+
 	public boolean isFirst() {
 		return page.isFirst();
 	}
